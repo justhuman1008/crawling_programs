@@ -1,11 +1,14 @@
+# 기본 모듈
 import discord
 from os import listdir
-from setting import token, want_int, userID
 
 # 크롤링
 from urllib.request import urlopen
 import urllib.request
 from bs4 import BeautifulSoup
+
+# 전역변수
+from setting import token, want_int, userID
 
 bot = discord.Bot()
 
@@ -16,7 +19,7 @@ async def on_ready():
     print(bot.user.name)
     print("연결에 성공했습니다.")
     print("=========================")
-    await bot.change_presence(activity=discord.Game("/가이드"))
+    await bot.change_presence(activity=discord.Game("환율 조사"))
 
 for filename in listdir('./cogs'): # Cogs 자동 로드(봇 작동시)
     if filename.endswith('.py'):
@@ -43,10 +46,8 @@ async def 환율(ctx):
             updown = "하락"
         print(exchange_rate)
         print(changed)
-        plm = exchange_rate.replace(".","")
-        reach = discord.Embed(title=f"현재 환율", description=f"­", colour=0xffdc16)
-        reach.add_field(name=f"현재 환율", value=f"{exchange_rate}\n{updown} {changed}\n\n[네이버 환율 바로가기](https://search.naver.com/search.naver?query=KRW+JPY)", inline=False)
-        reach.set_thumbnail(url="https://logoproject.naver.com/img/img_story_renewal.png")
-        await ctx.respond(embed=reach)
+        cmdemb = discord.Embed(title=f"현재 환율", description=f"{exchange_rate}\n{updown} {changed}\n\n[네이버 환율 바로가기](https://search.naver.com/search.naver?query=KRW+JPY)", colour=0x03c75a)
+        cmdemb.set_thumbnail(url="https://logoproject.naver.com/img/img_story_renewal.png")
+        await ctx.respond(embed=cmdemb)
 
 bot.run(token)

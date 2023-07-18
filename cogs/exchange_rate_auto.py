@@ -8,7 +8,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 # 전역변수
-from setting import want_int, userID
+from setting import want_int, userID, channelID
 
 #------------------------------------------------------------------------------------------
 
@@ -36,13 +36,20 @@ class exchange_rate(commands.Cog):
             updown = "하락"
         print(exchange_rate)
         print(changed)
+        channel = self.bot.get_channel(channelID)
+
+        for60s = discord.Embed(title=f"현재 환율", description=f"{exchange_rate}\n{updown} {changed}\n\n[네이버 환율 바로가기](https://search.naver.com/search.naver?query=KRW+JPY)", colour=0x03c75a)
+        for60s.set_thumbnail(url="https://logoproject.naver.com/img/img_story_renewal.png")
+        await channel.send(embed=for60s)
+
         plm = exchange_rate.replace(".","")
         if int(plm) <= want_int:
             user = await self.bot.fetch_user(userID)
-            reach = discord.Embed(title=f"목표 환율에 도달했습니다.", description=f"­", colour=0xffdc16)
+            reach = discord.Embed(title=f"목표 환율에 도달했습니다.", description=f"­", colour=0xff0000)
             reach.add_field(name=f"현재 환율", value=f"{exchange_rate}\n{updown} {changed}\n\n[네이버 환율 바로가기](https://search.naver.com/search.naver?query=KRW+JPY)", inline=False)
             reach.set_thumbnail(url="https://logoproject.naver.com/img/img_story_renewal.png")
             await user.send(embed=reach)
+            pass
 
     @Auto_check.before_loop
     async def before_printer(self):
